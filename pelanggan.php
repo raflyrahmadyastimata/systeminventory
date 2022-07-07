@@ -1,7 +1,6 @@
 <?php
 require 'cek_login.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,6 +23,7 @@ require 'cek_login.php';
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
+
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -51,6 +51,7 @@ require 'cek_login.php';
                             <div class="sb-nav-link-icon"><i class="fa fa-sign-out"></i></div>
                             Logout
                         </a>
+
                     </div>
                 </div>
             </nav>
@@ -58,52 +59,57 @@ require 'cek_login.php';
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Data Order</h1>
+                    <h1 class="mt-4">Data Pelanggan</h1>
                     <ol class="breadcrumb mb-4">
+
                         <li class="breadcrumb-item active">Selamat Datang</li>
                     </ol>
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-primary text-white mb-4">
-                            <div class="card-body">Jumlah Pesanan :</div>
+                            <div class="card-body">Jumlah Pelanggan :</div>
                         </div>
                         <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
                             data-bs-target="#myModal">
-                            Tambah Pesanan
+                            Tambah Pelanggan
                         </button>
                     </div>
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Data Order
+                            Data Pelanggan
                         </div>
                         <div class="card-body">
                             <table id="datatablesSimple">
                                 <thead>
                                     <tr>
-                                        <th>ID Pesanan</th>
-                                        <th>Tanggal Pesan</th>
+                                        <th>No</th>
                                         <th>Nama Pelanggan</th>
-                                        <th>Jumlah</th>
+                                        <th>No. Telp</th>
+                                        <th>Alamat</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>ID Pesanan</th>
-                                        <th>Tanggal Pesan</th>
-                                        <th>Nama Pelanggan</th>
-                                        <th>Jumlah</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </tfoot>
                                 <tbody>
+                                    
+                                    <?php
+                                    $getpelanggan = mysqli_query($koneksi, "SELECT * FROM pelanggan");
+                                    $i = 1;
+
+                                    while ($pl = mysqli_fetch_array($getpelanggan)) {
+                                        $id_pelanggan = $pl['id_pelanggan'];
+                                        $nama_pelanggan = $pl['nama_pelanggan'];
+                                        $no_tlp = $pl['no_tlp'];
+                                        $alamat = $pl['alamat'];
+                                    }
+                                    ?>
                                     <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
+                                        <td><?= $i++; ?></td>
+                                        <td><?= $nama_pelanggan; ?></td>
+                                        <td><?= $no_tlp; ?></td>
+                                        <td><?= $alamat; ?></td>
                                         <td>Edit | Delete</td>
                                     </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -136,19 +142,22 @@ require 'cek_login.php';
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
+
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Data Pesanan</h4>
+                <h4 class="modal-title">Data Tambah Pelanggan</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="POST">
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Pilih Pelanggan
+                    <input type="text" name="nama_pelanggan" class="form-control mt-3" placeholder="nama pelanggan">
+                    <input type="text" name="no_telp" class="form-control mt-3" placeholder="nomor telp">
+                    <input type="text" name="alamat" class="form-control mt-3" placeholder="alamat">
                 </div>
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" name="tambahpesanan">Simpan</button>
+                    <button type="submit" class="btn btn-success" name="tambahpelanggan">Simpan</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </form>
