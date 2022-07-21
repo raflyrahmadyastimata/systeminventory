@@ -1,8 +1,17 @@
 <?php
 require 'cek_login.php';
-$h1 = mysqli_query($koneksi, "SELECT * FROM produk");
-$h2 = mysqli_num_rows($h1);
+if (isset($_GET['idp'])) {
 
+    $idp = $_GET['idp'];
+
+    $ambilnamapelanggan = mysqli_query($koneksi, "SELECT * FROM pesanan p, 
+    pelanggan pl where p.id_pelanggan=pl.id_pelanggan AND p.id_pesanan='$idp'");
+    $np = mysqli_fetch_array($ambilnamapelanggan);
+    $namapel = $np['nama_pelanggan'];
+    $idpel = $np['id_pelanggan'];
+} else {
+    header('location:index.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,17 +77,18 @@ $h2 = mysqli_num_rows($h1);
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Stock Barang</h1>
+                    <h2 class="mt-4">ID Pesanan : <?= $idp; ?></h2>
+                <h2 class="mt-4">Nama Pelanggan : <?= $namapel; ?></h2>
                     <ol class="breadcrumb mb-4">
                     </ol>
                     <div class="row">
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-primary text-white mb-4">
-                                <div class="card-body">Jumlah Barang :<?=$h2;?> </div>
+                                <div class="card-body">Jumlah Pelanggan</div>
                             </div>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#myModal">
-                                Tambah Barang
+                                Tambah Pelanggan
                             </button>
                             <div class="container mt-3">
 
@@ -90,79 +100,74 @@ $h2 = mysqli_num_rows($h1);
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Data Stock Barang
+                            Data Pelanggan
                         </div>
                         <div class="card-body">
                             <table id="datatablesSimple">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Produk</th>
-                                        <th>Deskripsi</th>
-                                        <th>Harga</th>
-                                        <th>Stock</th>
-                                        <th>Edit | Delete</th>
+                                        <th>Nama Pelanggan</th>
+                                        <th>No. Telp</th>
+                                        <th>Alamat</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $getbarang = mysqli_query($koneksi, "SELECT * FROM produk");
+                                    $getpelanggan = mysqli_query($koneksi, "SELECT * FROM pelanggan");
                                     $i = 1;
 
-                                    while ($brg = mysqli_fetch_array($getbarang)) {
-                                        $nama_produk = $brg['nama_produk'];
-                                        $deskripsi = $brg['deskripsi'];
-                                        $harga = $brg['harga'];
-                                        $stock = $brg['stock'];
-                                        $id_produk = $brg['id_produk'];
-                                    ?>
+                                    while ($pl = mysqli_fetch_array($getpelanggan)) {
+                                        $id_pelanggan = $pl['id_pelanggan'];
+                                        $nama_pelanggan = $pl['nama_pelanggan'];
+                                        $notelp = $pl['no_tlp'];
+                                        $alamat = $pl['alamat'];
 
+                                    ?>
                                     <tr>
                                         <td><?= $i++;  ?></td>
-                                        <td><?= $nama_produk;  ?></td>
-                                        <td><?= $deskripsi;  ?></td>
-                                        <td>Rp. <?= number_format($harga);  ?></td>
-                                        <td><?= $stock;  ?></td>
+                                        <td><?= $nama_pelanggan;  ?></td>
+                                        <td><?= $notelp;  ?></td>
+                                        <td><?= $alamat;  ?></td>
                                         <td><button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                                data-bs-target="#edit<?= $id_produk; ?>">
+                                                data-bs-target="#edit<?= $id_pelanggan; ?>">
                                                 Edit
                                             </button>
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#delete<?= $id_produk; ?>">
+                                                data-bs-target="#delete<?= $id_pelanggan; ?>">
                                                 Delete
                                             </button>
                                         </td>
                                     </tr>
                                     <!-- Modal Edit -->
-                                    <div class="modal" id="edit<?= $id_produk; ?>">
+                                    <div class="modal" id="edit<?= $id_pelanggan; ?>">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
 
                                                 <!-- Modal Header -->
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Edit Barang <?= $nama_produk;  ?></h4>
+                                                    <h4 class="modal-title">Edit Pelanggan <?= $nama_pelanggan;  ?></h4>
                                                     <button type="button" class="btn-close"
                                                         data-bs-dismiss="modal"></button>
                                                 </div>
                                                 <form method="POST">
                                                     <!-- Modal body -->
                                                     <div class="modal-body">
-                                                        <input type="text" name="nama_produk" class="form-control mt-3"
-                                                            placeholder="nama produk" value="<?= $nama_produk; ?>">
-                                                        <input type="text" name="deskripsi" class="form-control mt-3"
-                                                            placeholder="deskripsi produk" value="<?= $deskripsi;  ?>">
-                                                        <input type="num" name="harga" class="form-control mt-3"
-                                                            placeholder="harga" value="<?= $harga;  ?>">
-                                                        <input type="num" name="stock" class="form-control mt-3"
-                                                            placeholder="stock" value="<?= $stock;  ?>">
-                                                        <input type="hidden" name="id_produk" class="form-control mt-3"
-                                                            value="<?= $id_produk;  ?>">
+                                                        <input type="text" name="nama_pelanggan"
+                                                            class="form-control mt-3" value="<?= $nama_pelanggan; ?>">
+                                                        <input type="text" name="no_telp" class="form-control mt-3"
+                                                            value="<?= $notelp;  ?>">
+                                                        <input type="text" name="alamat" class="form-control mt-3"
+                                                            value="<?= $alamat;  ?>">
+                                                        <input type="hidden" name="id_pelanggan"
+                                                            class="form-control mt-3" value="<?= $id_pelanggan;  ?>">
                                                     </div>
 
                                                     <!-- Modal footer -->
                                                     <div class="modal-footer">
                                                         <button type="submit" class="btn btn-success"
-                                                            name="editproduk">Simpan</button>
+                                                            name="editpelanggan">Simpan</button>
                                                         <button type="button" class="btn btn-danger"
                                                             data-bs-dismiss="modal">Tutup</button>
                                                     </div>
@@ -170,30 +175,31 @@ $h2 = mysqli_num_rows($h1);
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <!-- Modal Hapus -->
-                                    <div class="modal" id="delete<?= $id_produk; ?>">
+                                    <div class="modal" id="delete<?= $id_pelanggan; ?>">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
 
                                                 <!-- Modal Header -->
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Delete Barang <?= $nama_produk;  ?></h4>
+                                                    <h4 class="modal-title">Delete Barang <?= $nama_pelanggan;  ?></h4>
                                                     <button type="button" class="btn-close"
                                                         data-bs-dismiss="modal"></button>
                                                 </div>
                                                 <form method="POST">
                                                     <!-- Modal body -->
                                                     <div class="modal-body">
-                                                        Apakah Anda Yakin akan menghapus barang ini?
-                                                        <input type="hidden" name="id_produk" class="form-control mt-3"
-                                                            value="<?= $id_produk;  ?>">
+                                                        Apakah Anda Yakin akan menghapus Pelanggan ini?
+                                                        <input type="hidden" name="id_pelanggan"
+                                                            class="form-control mt-3" value="<?= $id_pelanggan;  ?>">
                                                     </div>
 
                                                     <!-- Modal footer -->
                                                     <div class="modal-footer">
                                                         <button type="submit" class="btn btn-success"
-                                                            name="hapusproduk">Hapus</button>
+                                                            name="hapuspelanggan">Hapus</button>
                                                         <button type="button" class="btn btn-danger"
                                                             data-bs-dismiss="modal">Tutup</button>
                                                     </div>
@@ -201,11 +207,7 @@ $h2 = mysqli_num_rows($h1);
                                             </div>
                                         </div>
                                     </div>
-
-
-
                                     <?php }; ?>
-
                                 </tbody>
                             </table>
                         </div>
@@ -230,28 +232,26 @@ $h2 = mysqli_num_rows($h1);
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
 </body>
-<!-- Modal -->
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Data Barang</h4>
+                <h4 class="modal-title">Data Tambah Pelanggan</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="POST">
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <input type="text" name="nama_produk" class="form-control mt-3" placeholder="nama produk">
-                    <input type="text" name="deskripsi" class="form-control mt-3" placeholder="deskripsi produk">
-                    <input type="num" name="harga" class="form-control mt-3" placeholder="harga">
-                    <input type="num" name="stock" class="form-control mt-3" placeholder="stock">
+                    <input type="text" name="nama_pelanggan" class="form-control mt-3" placeholder="nama pelanggan">
+                    <input type="text" name="no_telp" class="form-control mt-3" placeholder="no telp">
+                    <input type="text" name="alamat" class="form-control mt-3" placeholder="alamat">
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" name="tambahproduk">Simpan</button>
+                    <button type="submit" class="btn btn-success" name="tambahpelanggan">Simpan</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </form>

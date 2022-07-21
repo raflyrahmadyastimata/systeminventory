@@ -141,7 +141,8 @@ if (isset($_POST['editproduk'])) {
 if (isset($_POST['hapusproduk'])) {
     $id_produk = $_POST['id_produk'];
 
-    $hapusproduk = mysqli_query($koneksi, "DELETE FROM produk WHERE id_produk='$id_produk'");
+    $hapusproduk = mysqli_query
+    ($koneksi, "DELETE FROM produk WHERE id_produk='$id_produk'");
 
     if ($hapusproduk) {
         // kalau sukses
@@ -151,5 +152,44 @@ if (isset($_POST['hapusproduk'])) {
         alert("Gagal Hapus Stock")
         window.location.href="stock.php"
         </script>';
+    }
+}
+if (isset($_POST['barangmasuk'])) {
+    //deskripsi initial variable
+    $id_produk = $_POST['id_produk'];
+    $quantity = $_POST['qty'];
+
+    $barangmasuk = mysqli_query(
+        $koneksi,
+        "INSERT INTO masuk (id_produk, qty) VALUES ('$id_produk','$quantity')"
+    );
+
+    if ($barangmasuk) {
+        // kalau sukses
+        header('location:masuk.php');
+    } else {
+        echo '<script>
+    alert("Gagal Tambah Quantity")
+    window.location.href="masuk.php"
+    </script>';
+    }
+}
+if (isset($_POST['tambahpesanan'])) {
+    //deskripsi initial variable
+    $id_pelanggan = $_POST['id_pelanggan'];
+
+    $tambahpesanan = mysqli_query($koneksi,
+        "INSERT INTO pesanan (id_pelanggan) 
+   VALUES ('$id_pelanggan')"
+    );
+
+    if ($tambahpesanan) {
+        // kalau sukses
+        header('location:index.php');
+    } else {
+        echo '<script>
+    alert("Gagal Tambah Produk")
+    window.location.href="index.php"
+    </script>';
     }
 }
