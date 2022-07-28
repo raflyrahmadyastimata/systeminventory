@@ -165,7 +165,7 @@ if (isset($_GET['idp'])) {
                                                     <!-- Modal footer -->
                                                     <div class="modal-footer">
                                                         <button type="submit" class="btn btn-success"
-                                                            name="hapusprodukpesanan">Save</button>
+                                                            name="hapusprodukpesanan">Hapus</button>
                                                         <button type="button" class="btn btn-danger"
                                                             data-bs-dismiss="modal">Tutup</button>
                                                     </div>
