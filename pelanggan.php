@@ -111,7 +111,7 @@ $h2 = mysqli_num_rows($h1);
                                     while ($pl = mysqli_fetch_array($getpelanggan)) {
                                         $id_pelanggan = $pl['id_pelanggan'];
                                         $nama_pelanggan = $pl['nama_pelanggan'];
-                                        $notelp = $pl['no_tlp'];
+                                        $notelp = $pl['no_telp'];
                                         $alamat = $pl['alamat'];
 
                                     ?>

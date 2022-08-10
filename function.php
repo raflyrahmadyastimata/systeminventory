@@ -41,7 +41,7 @@ if (isset($_POST['tambahpelanggan'])) {
     $tambahpelanggan = mysqli_query(
         $koneksi,
         "INSERT INTO pelanggan (nama_pelanggan, no_telp, alamat) 
-   VALUES ('$nama_pelanggan','$no_telp','$alamat')"
+  VALUES ('$nama_pelanggan','$no_telp','$alamat')"
     );
 
     if ($tambahpelanggan) {
